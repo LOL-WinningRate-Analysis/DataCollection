@@ -24,7 +24,7 @@ public class DataCollectionRepository {
         .collect(Collectors.toList());
         Datas datas = new Datas();
 
-        if(matchDetail.getTeams().get(0).getWin()=="Win"){
+        if(matchDetail.getTeams().get(0).getWin().equals("Win")){
             temp.add(0);
         }
         else {temp.add(1);}
