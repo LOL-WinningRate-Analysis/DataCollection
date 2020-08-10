@@ -37,7 +37,7 @@ public class DataCollectionService {
         return dataCollectionRepository.getDatas(matchId);
     }
 
-
+/*
     @Scheduled(fixedDelay = 1500L)
     public void saveDetailEveryTwoSeconds(){
 
@@ -45,4 +45,5 @@ public class DataCollectionService {
         dataCollectionRepository.saveMatchDetail(matchDetail);
         targetmatchId++;
     }
+ */
 }
