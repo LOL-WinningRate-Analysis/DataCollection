@@ -9,7 +9,7 @@ import java.util.List;
 public class MatchDetail {
     @Id
     private long gameId;
-    private int queueId;
+    private int queueId; //queueId=420이면 솔랭
     private List<ParticipantDto> participants;
     private List<TeamStatsDto> teams;
 
