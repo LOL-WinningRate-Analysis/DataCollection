@@ -50,8 +50,6 @@ public class DataCollectionService {
         targetmatchId++;
     }*/
 
-    public
-
     public LeagueEntryDto[] getuserName(String tier, String division, int page){
         LeagueEntryDto[] leagueEntryDtos = dataCollectionApiClient.getUserName(tier, division, page);
         //log.info("{}",leagueEntryDtos[0].getSummonerName());

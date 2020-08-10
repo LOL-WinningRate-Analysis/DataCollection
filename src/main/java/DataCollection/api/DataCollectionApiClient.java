@@ -2,6 +2,7 @@ package DataCollection.api;
 
 import DataCollection.domain.LeagueEntryDto;
 import DataCollection.domain.MatchDetail;
+import DataCollection.domain.Summoners;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class DataCollectionApiClient {
     private String GET_GAMEDETAIL_URI = "https://kr.api.riotgames.com/lol/match/v4/matches/{gameId}?api_key={ApiKey}";
     private String GET_USERNAME_URI="https://kr.api.riotgames.com/lol/league-exp/v4/entries/RANKED_SOLO_5x5/{tier}/{division}?page={page}&api_key={ApiKey}";
     private String GET_GAMEIDS_URI="";
+    private String GET_ACCOUNTID_URI="https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/{SummonerName}?api_key={ApiKey}";
 
     public MatchDetail getMatchDetail(long matchid){
         MatchDetail matchDetail = restTemplate.getForObject(GET_GAMEDETAIL_URI,MatchDetail.class,matchid,ApiKey);
@@ -30,6 +32,13 @@ public class DataCollectionApiClient {
         LeagueEntryDto[] leagueEntryDtoSet = restTemplate.getForObject(GET_USERNAME_URI, LeagueEntryDto[].class,tier,divisiion,page,ApiKey);
         log.info("{}",leagueEntryDtoSet);
         return leagueEntryDtoSet;
+    }
+    public String getAccountId(String summonerName){
+        Summoners AccountId = restTemplate.getForObject(GET_ACCOUNTID_URI,Summoners.class,summonerName,ApiKey);
+        return AccountId.getAccountId();
+    }
+    public List<Long> getMatchIds(String accountId){
+
     }
 
 }
