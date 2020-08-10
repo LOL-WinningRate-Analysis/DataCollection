@@ -2,7 +2,9 @@ package DataCollection.repository;
 
 import DataCollection.Service.DataCollectionService;
 import DataCollection.domain.Datas;
+import DataCollection.domain.LeagueEntryDto;
 import DataCollection.domain.MatchDetail;
+import DataCollection.domain.NameList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
@@ -11,6 +13,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,6 +56,14 @@ public class DataCollectionRepository {
             log.info("{}'s queueId is {}",matchDetail.getGameId(),matchDetail.getQueueId());
         }
 
+    }
+
+    public void saveEntryList(LeagueEntryDto[] leagueEntryDtos){
+        NameList savenameList = new NameList();
+        savenameList.setNames(Arrays.stream(leagueEntryDtos).map(c -> c.getSummonerName()).collect(Collectors.toList()));
+        savenameList.setTier(leagueEntryDtos[0].getTier());
+        savenameList.setDivision(leagueEntryDtos[0].getRank());
+        mongoTemplate.save(savenameList);
     }
 
 }

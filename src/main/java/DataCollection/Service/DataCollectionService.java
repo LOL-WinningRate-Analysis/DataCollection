@@ -8,12 +8,12 @@ import DataCollection.repository.DataCollectionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Service
 @EnableScheduling
@@ -41,19 +41,21 @@ public class DataCollectionService {
         return dataCollectionRepository.getDatas(matchId);
     }
 
-/*
+    /*
     @Scheduled(fixedDelay = 1500L)
     public void saveDetailEveryTwoSeconds(){
 
         MatchDetail matchDetail = dataCollectionApiClient.getMatchDetail(targetmatchId);
         dataCollectionRepository.saveMatchDetail(matchDetail);
         targetmatchId++;
-    }
- */
+    }*/
+
+    public
 
     public LeagueEntryDto[] getuserName(String tier, String division, int page){
         LeagueEntryDto[] leagueEntryDtos = dataCollectionApiClient.getUserName(tier, division, page);
-        log.info("{}",leagueEntryDtos[0].getSummonerName());
+        //log.info("{}",leagueEntryDtos[0].getSummonerName());
+        dataCollectionRepository.saveEntryList(leagueEntryDtos);
         return leagueEntryDtos;
     }
 }
