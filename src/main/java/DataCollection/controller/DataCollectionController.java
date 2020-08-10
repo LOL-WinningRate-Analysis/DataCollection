@@ -3,6 +3,7 @@ package DataCollection.controller;
 import DataCollection.Service.DataCollectionService;
 import DataCollection.api.DataCollectionApiClient;
 import DataCollection.domain.Datas;
+import DataCollection.domain.LeagueEntryDto;
 import DataCollection.domain.MatchDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,10 +29,8 @@ public class DataCollectionController {
         return dataCollectionService.getDatas(matchId);
     }
 
-    @Autowired
-    DataCollectionApiClient dataCollectionApiClient;
     @GetMapping("/test")
-    public Set getuserName(@RequestParam String tier, @RequestParam String division, @RequestParam int page){
-        return dataCollectionApiClient.getUserName(tier,division,page);
+    public LeagueEntryDto[] getuserName(@RequestParam String tier, @RequestParam String division, @RequestParam int page){
+        return dataCollectionService.getuserName(tier, division, page);
     }
 }
