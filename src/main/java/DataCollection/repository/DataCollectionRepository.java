@@ -1,18 +1,19 @@
 package DataCollection.repository;
 
 import DataCollection.Service.DataCollectionService;
-import DataCollection.domain.Datas;
-import DataCollection.domain.LeagueEntryDto;
-import DataCollection.domain.MatchDetail;
-import DataCollection.domain.NameList;
+import DataCollection.api.DataCollectionApiClient;
+import DataCollection.domain.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.data.annotation.AccessType;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +24,8 @@ public class DataCollectionRepository {
 
     @Autowired
     DataCollectionService dataCollectionService;
+    @Autowired
+    DataCollectionApiClient dataCollectionApiClient;
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -48,14 +51,25 @@ public class DataCollectionRepository {
         return MatchDetailtoDatas(matchDetail);
     }
 
+    public Datas[] getDatasList(int DBId){
+        MatchIds matchIds = findMatchIds(DBId);
+        log.info("matchIds : {}",matchIds);
+        List<Long> onlymatchIds = matchIds.getMatchIds();
+        log.info("only : {}",onlymatchIds);
+        Datas[] datas = new Datas[100];
+        int j=0;
+
+        for(Long i : onlymatchIds){
+            datas[j] = getDatas(i);
+            log.info("datas {}",datas[j]);
+            j++;
+        }
+    return datas;
+    }
+
     public void saveMatchDetail(MatchDetail matchDetail){
-        if(matchDetail.getQueueId()==420){
             MatchDetail saveDetail1 = mongoTemplate.save(matchDetail);
             log.info("Save: {}", matchDetail.getGameId());
-        }else{
-            log.info("{}'s queueId is {}",matchDetail.getGameId(),matchDetail.getQueueId());
-        }
-
     }
 
     public void saveEntryList(LeagueEntryDto[] leagueEntryDtos){
@@ -66,4 +80,28 @@ public class DataCollectionRepository {
         mongoTemplate.save(savenameList);
     }
 
+    public void savematchIds(List<String> matchids){
+        mongoTemplate.save(matchids);
+    }
+
+
+    public MatchIds makeMatchIds(String summonerName,int Id){
+        MatchIds matchIds = new MatchIds();
+        matchIds.setSummonerName(summonerName);
+        matchIds.setId(Id);
+        return  matchIds;
+    }
+
+    public void saveMatchIds(MatchIds matchIds){
+        mongoTemplate.save(matchIds);
+        log.info("Save matchIds{}",matchIds);
+    }
+
+    public MatchIds findMatchIds(int DBId){
+        Query query = Query.query(
+                Criteria.where("_id").is(DBId)
+        );
+        MatchIds matchIds = mongoTemplate.findOne(query, MatchIds.class);
+        return matchIds;
+    }
 }

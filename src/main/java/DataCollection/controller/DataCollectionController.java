@@ -1,17 +1,13 @@
 package DataCollection.controller;
 
 import DataCollection.Service.DataCollectionService;
-import DataCollection.api.DataCollectionApiClient;
 import DataCollection.domain.Datas;
-import DataCollection.domain.LeagueEntryDto;
 import DataCollection.domain.MatchDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.Set;
+import org.springframework.web.client.HttpClientErrorException;
 
 @RestController
 public class DataCollectionController {
@@ -30,7 +26,17 @@ public class DataCollectionController {
     }
 
     @GetMapping("/test")
-    public LeagueEntryDto[] getuserName(@RequestParam String tier, @RequestParam String division, @RequestParam int page){
-        return dataCollectionService.getuserName(tier, division, page);
+    public void getuserName(@RequestParam String tier, @RequestParam String division, @RequestParam int Id, @RequestParam int page) throws InterruptedException
+    {       dataCollectionService.getuserName(tier, division,Id ,page);
+    }
+
+    @GetMapping("/savedetail-DB")
+    public void savedetail(@RequestParam int startnum) throws InterruptedException {
+        dataCollectionService.savedetail(startnum);
+    }
+
+    @GetMapping("/Datasss")
+    public Datas[] getdataList(@RequestParam int DBId){
+        return dataCollectionService.getDataList(DBId);
     }
 }

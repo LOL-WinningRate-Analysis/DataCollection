@@ -7,8 +7,10 @@ import DataCollection.domain.Summoners;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,7 +37,7 @@ public class DataCollectionApiClient {
         log.info("{}",leagueEntryDtoSet);
         return leagueEntryDtoSet;
     }
-    public String getAccountId(String summonerName){
+    public String getAccountId(String summonerName) throws HttpClientErrorException {
         Summoners AccountId = restTemplate.getForObject(GET_ACCOUNTID_URI,Summoners.class,summonerName,ApiKey);
         return AccountId.getAccountId();
     }
