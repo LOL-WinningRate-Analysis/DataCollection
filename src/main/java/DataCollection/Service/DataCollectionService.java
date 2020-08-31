@@ -83,6 +83,8 @@ public class DataCollectionService {
             if((matchIds = dataCollectionRepository.findMatchIds(temp))!=null){
                 for(int j=0;j<100;j++){
                     try{
+                        if(matchIds.getMatchIds().get(j)==null)
+                            break;
                     Thread.sleep(1500);
                     MatchDetail matchDetail = getMatchDetail(matchIds.getMatchIds().get(j));
                     dataCollectionRepository.saveMatchDetail(matchDetail);

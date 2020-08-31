@@ -43,11 +43,12 @@ public class DataCollectionRepository {
         else {temp.add(1);}
 
         datas.setArray(temp);
+        datas.setMatchId(matchDetail.getGameId());
         return datas;
     }
 
     public Datas getDatas(long matchId){
-        MatchDetail matchDetail = dataCollectionService.getMatchDetail(matchId);
+        MatchDetail matchDetail = findMatchDetail(matchId);
         return MatchDetailtoDatas(matchDetail);
     }
 
@@ -58,7 +59,6 @@ public class DataCollectionRepository {
         log.info("only : {}",onlymatchIds);
         Datas[] datas = new Datas[100];
         int j=0;
-
         for(Long i : onlymatchIds){
             datas[j] = getDatas(i);
             log.info("datas {}",datas[j]);
@@ -103,5 +103,13 @@ public class DataCollectionRepository {
         );
         MatchIds matchIds = mongoTemplate.findOne(query, MatchIds.class);
         return matchIds;
+    }
+
+    public MatchDetail findMatchDetail(long matchId){
+        Query query = Query.query(
+                Criteria.where("_id").is(matchId)
+        );
+        MatchDetail matchDetail = mongoTemplate.findOne(query, MatchDetail.class);
+        return matchDetail;
     }
 }
