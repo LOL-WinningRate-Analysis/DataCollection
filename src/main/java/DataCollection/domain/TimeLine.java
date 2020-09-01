@@ -1,12 +1,15 @@
 package DataCollection.domain;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 
 import java.util.List;
 import java.util.Map;
 
 @Data
 public class TimeLine {
+    @Id
+    private long matchid;
     private List<MatchFrameDto> frames;
     private long frameInterval;
     @Data

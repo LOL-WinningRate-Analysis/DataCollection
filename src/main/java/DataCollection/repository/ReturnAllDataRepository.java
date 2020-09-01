@@ -67,28 +67,6 @@ public class ReturnAllDataRepository {
         log.info("size : {}",matchDetails.size());
     }
 
-    public void saveTimeLine(int DBId) {
-        List<MatchDetail> matchDetails = new LinkedList<>();
-        log.info("start");
-        for (int i = 0; i <= 200; i++) {
-            int temp = DBId + i;
-            log.info("{}", temp);
-            MatchIds matchIds = new MatchIds();
-            if ((matchIds = dataCollectionRepository.findMatchIds(temp)) != null) {
-                for (int j = 0; j < 100; j++) {
-                    try {
-                        MatchDetail matchDetail = dataCollectionRepository.findMatchDetail(matchIds.getMatchIds().get(j));
-                        matchDetails.add(matchDetail);
-                        Datas datas = dataCollectionRepository.MatchDetailtoDatas(matchDetail);
-                        mongoTemplate.save(datas);
-                        log.info("i= {} j={} save {}", temp, j, datas);
-                    } catch (NullPointerException ignore) {
-                    }catch (IndexOutOfBoundsException ignore){}
-                }
-            }
-        }
-        log.info("size : {}",matchDetails.size());
-    }
 }
 
 

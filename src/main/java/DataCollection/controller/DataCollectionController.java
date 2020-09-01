@@ -39,4 +39,7 @@ public class DataCollectionController {
     public Datas[] getdataList(@RequestParam int DBId){
         return dataCollectionService.getDataList(DBId);
     }
+
+    @GetMapping("/saveTimeLine")
+    public void saveTimeLine(@RequestParam int DBId){dataCollectionService.saveTimeLine(DBId);}
 }

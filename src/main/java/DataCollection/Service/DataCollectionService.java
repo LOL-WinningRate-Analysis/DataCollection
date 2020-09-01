@@ -1,10 +1,7 @@
 package DataCollection.Service;
 
 import DataCollection.api.DataCollectionApiClient;
-import DataCollection.domain.Datas;
-import DataCollection.domain.LeagueEntryDto;
-import DataCollection.domain.MatchDetail;
-import DataCollection.domain.MatchIds;
+import DataCollection.domain.*;
 import DataCollection.repository.DataCollectionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -90,6 +88,30 @@ public class DataCollectionService {
                     dataCollectionRepository.saveMatchDetail(matchDetail);
                     log.info("i= {} j={} Save detail : {}",temp,j,matchDetail);
                 }catch (Exception ignore){}
+                }
+            }
+        }
+    }
+
+    public void saveTimeLine(int DBId) {
+        log.info("start");
+        for (int i = 0; i <= 200; i++) {
+            int temp = DBId + i;
+            log.info("{}", temp);
+            MatchIds matchIds = new MatchIds();
+            if ((matchIds = dataCollectionRepository.findMatchIds(temp)) != null) {
+                for (int j = 0; j < 100; j++) {
+                    try {
+
+                        long matchid = matchIds.getMatchIds().get(j);
+                        Thread.sleep(1500);
+                        TimeLine timeLine = dataCollectionApiClient.getTimeLine(matchid);
+                        timeLine.setMatchid(matchid);
+                        dataCollectionRepository.saveTimeLine(timeLine);
+                        log.info("i= {} j={} \n {}", temp, j, timeLine);
+                    } catch (NullPointerException ignore) {
+                    }catch (IndexOutOfBoundsException ignore){} catch (InterruptedException e) {
+                    }catch (HttpServerErrorException htt){}
                 }
             }
         }

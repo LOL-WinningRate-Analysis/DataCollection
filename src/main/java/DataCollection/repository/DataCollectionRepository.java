@@ -112,4 +112,8 @@ public class DataCollectionRepository {
         MatchDetail matchDetail = mongoTemplate.findOne(query, MatchDetail.class);
         return matchDetail;
     }
+
+    public void saveTimeLine(TimeLine timeLine){
+        mongoTemplate.save(timeLine);
+    }
 }
