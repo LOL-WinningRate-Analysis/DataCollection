@@ -6,7 +6,6 @@ import DataCollection.repository.DataCollectionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -36,13 +35,6 @@ public class DataCollectionService {
         return dataCollectionApiClient.getMatchDetail(matchId);
     }
 
-    public Datas getDatas(long matchId){
-        return dataCollectionRepository.getDatas(matchId);
-    }
-
-    public Datas[] getDataList(int DBId){
-        return dataCollectionRepository.getDatasList(DBId);
-    }
 
     /*
     @Scheduled(fixedDelay = 1500L)
@@ -53,7 +45,7 @@ public class DataCollectionService {
         targetmatchId++;
     }*/
 
-    public void getuserName(String tier, String division,int Id,int page) throws InterruptedException {
+    public void saveUserInformation(String tier, String division,int Id,int page) throws InterruptedException {
         LeagueEntryDto[] leagueEntryDtos = dataCollectionApiClient.getUserName(tier, division,page);
         log.info("leagueEntryDtos: {}",leagueEntryDtos);
                 for(int i=0;leagueEntryDtos[i]!=null;i++) {
@@ -104,7 +96,7 @@ public class DataCollectionService {
                     try {
 
                         long matchid = matchIds.getMatchIds().get(j);
-                        Thread.sleep(1500);
+                        Thread.sleep(2000);
                         TimeLine timeLine = dataCollectionApiClient.getTimeLine(matchid);
                         timeLine.setMatchid(matchid);
                         dataCollectionRepository.saveTimeLine(timeLine);

@@ -17,7 +17,5 @@ public class ReturnAllDatasService {
         return returnAllDataRepository.returnAllDetails(DBId);
     }
 
-    public void saveAllDatas(int DBId){
-        returnAllDataRepository.saveDatasList(DBId);
-    }
+
 }

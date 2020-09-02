@@ -21,7 +21,5 @@ public class ReturnAllDatasController {
         return returnAllDatasService.returnAllDetails(DBId);
     }
 
-    @GetMapping("/returnAllDatas")
-    public void saveAllDatasList(@RequestParam int DBId){ returnAllDatasService.saveAllDatas(DBId);}
 
 }
