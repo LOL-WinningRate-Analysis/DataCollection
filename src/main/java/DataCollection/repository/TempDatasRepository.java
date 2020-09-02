@@ -17,10 +17,7 @@ import java.util.stream.Collectors;
 public class TempDatasRepository {
 
     @Autowired
-    BaseRepository dataCollectionRepository;
-
-    @Autowired
-    private MongoTemplate mongoTemplate;
+    MongoTemplate mongoTemplate;
 
     @Autowired
     MongoDBRepository mongoDBRepository;

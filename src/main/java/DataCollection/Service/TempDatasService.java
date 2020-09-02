@@ -11,12 +11,6 @@ import org.springframework.stereotype.Service;
 public class TempDatasService {
 
     @Autowired
-    BaseRepository dataCollectionRepository;
-
-    @Autowired
-    MongoDBRepository returnAllDataRepository;
-
-    @Autowired
     TempDatasRepository tempDatasRepository;
 
 

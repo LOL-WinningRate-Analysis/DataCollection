@@ -21,7 +21,7 @@ public class DataCollectionService {
     DataCollectionApiClient dataCollectionApiClient;
 
     @Autowired
-    BaseRepository dataCollectionRepository;
+    BaseRepository baseRepository;
 
     @Autowired
     MongoDBRepository mongoDBRepository;
@@ -48,7 +48,7 @@ public class DataCollectionService {
                 for(int i=0;leagueEntryDtos[i]!=null;i++) {
                     Thread.sleep(3000);
                     MatchIds matchIds;
-                    matchIds = dataCollectionRepository.makeMatchIds(leagueEntryDtos[i].getSummonerName(),Id+i);
+                    matchIds = baseRepository.makeMatchIds(leagueEntryDtos[i].getSummonerName(),Id+i);
                     try {
                         String accountId = dataCollectionApiClient.getAccountId(leagueEntryDtos[i].getSummonerName());
 

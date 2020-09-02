@@ -18,15 +18,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class BaseRepository {
 
-    @Autowired
-    DataCollectionService dataCollectionService;
-    @Autowired
-    DataCollectionApiClient dataCollectionApiClient;
-
-    @Autowired
-    private MongoTemplate mongoTemplate;
-
-
     public MatchIds makeMatchIds(String summonerName,int Id){
         MatchIds matchIds = new MatchIds();
         matchIds.setSummonerName(summonerName);
