@@ -2,16 +2,14 @@ package DataCollection.Service;
 
 import DataCollection.api.DataCollectionApiClient;
 import DataCollection.domain.*;
-import DataCollection.repository.DataCollectionRepository;
+import DataCollection.repository.BaseRepository;
+import DataCollection.repository.MongoDBRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
-
-import javax.annotation.PostConstruct;
-import java.io.IOException;
 
 
 @Service
@@ -23,17 +21,16 @@ public class DataCollectionService {
     DataCollectionApiClient dataCollectionApiClient;
 
     @Autowired
-    DataCollectionRepository dataCollectionRepository;
+    BaseRepository dataCollectionRepository;
 
+    @Autowired
+    MongoDBRepository mongoDBRepository;
 
-    @PostConstruct
-    public void setUpmatchIdtoUse() throws IOException {
-
-    }
 
     public MatchDetail getMatchDetail(long matchId) {
         return dataCollectionApiClient.getMatchDetail(matchId);
     }
+
 
 
     /*
@@ -57,7 +54,7 @@ public class DataCollectionService {
 
                     matchIds.setMatchIds(dataCollectionApiClient.getMatchIds(accountId));
                     }catch (HttpClientErrorException ignore){}
-                    dataCollectionRepository.saveMatchIds(matchIds);
+                    mongoDBRepository.saveMatchIds(matchIds);
                     log.info("{}",matchIds);
                 }
 
@@ -70,14 +67,14 @@ public class DataCollectionService {
             int temp = startnum+i;
             log.info("{}",temp);
             MatchIds matchIds = new MatchIds();
-            if((matchIds = dataCollectionRepository.findMatchIds(temp))!=null){
+            if((matchIds = mongoDBRepository.findMatchIds(temp))!=null){
                 for(int j=0;j<100;j++){
                     try{
                         if(matchIds.getMatchIds().get(j)==null)
                             break;
                     Thread.sleep(1500);
                     MatchDetail matchDetail = getMatchDetail(matchIds.getMatchIds().get(j));
-                    dataCollectionRepository.saveMatchDetail(matchDetail);
+                    mongoDBRepository.saveMatchDetail(matchDetail);
                     log.info("i= {} j={} Save detail : {}",temp,j,matchDetail);
                 }catch (Exception ignore){}
                 }
@@ -91,7 +88,7 @@ public class DataCollectionService {
             int temp = DBId + i;
             log.info("{}", temp);
             MatchIds matchIds = new MatchIds();
-            if ((matchIds = dataCollectionRepository.findMatchIds(temp)) != null) {
+            if ((matchIds = mongoDBRepository.findMatchIds(temp)) != null) {
                 for (int j = 0; j < 100; j++) {
                     try {
 
@@ -99,7 +96,7 @@ public class DataCollectionService {
                         Thread.sleep(2000);
                         TimeLine timeLine = dataCollectionApiClient.getTimeLine(matchid);
                         timeLine.setMatchid(matchid);
-                        dataCollectionRepository.saveTimeLine(timeLine);
+                        mongoDBRepository.saveTimeLine(timeLine);
                         log.info("i= {} j={} \n {}", temp, j, timeLine);
                     } catch (NullPointerException ignore) {
                     }catch (IndexOutOfBoundsException ignore){} catch (InterruptedException e) {

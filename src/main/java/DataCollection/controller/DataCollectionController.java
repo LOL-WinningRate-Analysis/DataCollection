@@ -18,22 +18,24 @@ public class DataCollectionController {
     @Autowired
     TempDatasService tempDatasService;
 
+    /*
     @GetMapping("/GetMatchDetail")
     public MatchDetail getMatchDetail(@RequestParam long matchId){
         return dataCollectionService.getMatchDetail(matchId);
     }
 
-    @GetMapping("/test")
+     */
+
+    @GetMapping("/Save/saveUserInformation")
     public void saveUserInformation(@RequestParam String tier, @RequestParam String division, @RequestParam int Id, @RequestParam int page) throws InterruptedException
     {       dataCollectionService.saveUserInformation(tier, division,Id ,page);
     }
 
-    @GetMapping("/savedetail-DB")
+    @GetMapping("/Save/saveMatchDetail")
     public void savedetail(@RequestParam int startnum) throws InterruptedException {
         dataCollectionService.savedetail(startnum);
     }
 
-
-    @GetMapping("/saveTimeLine")
+    @GetMapping("/Save/saveMatchTimeLine")
     public void saveTimeLine(@RequestParam int DBId){dataCollectionService.saveTimeLine(DBId);}
 }
