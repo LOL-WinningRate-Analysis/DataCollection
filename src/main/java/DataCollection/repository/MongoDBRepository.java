@@ -13,11 +13,7 @@ import org.springframework.stereotype.Repository;
 public class MongoDBRepository {
 
     @Autowired
-    private MongoTemplate mongoTemplate;
-    @Autowired
-    BaseRepository dataCollectionRepository;
-    @Autowired
-    TempDatasRepository tempDatasRepository;
+    MongoTemplate mongoTemplate;
 /*
    public List returnAllDetails(int DBId) {
         List<MatchDetail> matchDetails = new LinkedList<>();

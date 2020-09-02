@@ -18,7 +18,7 @@ public class DataCollectionApiClient {
     @Autowired
     RestTemplate restTemplate = new RestTemplate();
 
-    private String ApiKey = "RGAPI-7d6233c1-f10c-4ccd-95fa-3f5cc3d268ea";
+    private String ApiKey = "RGAPI-4f201d9b-c892-42df-9186-30653ecc3d96";
     private String GET_GAMEDETAIL_URI = "https://kr.api.riotgames.com/lol/match/v4/matches/{gameId}?api_key={ApiKey}";
     private String GET_USERNAME_URI="https://kr.api.riotgames.com/lol/league-exp/v4/entries/RANKED_SOLO_5x5/{tier}/{division}?page={page}&api_key={ApiKey}";
     private String GET_GAMEIDS_URI="https://kr.api.riotgames.com/lol/match/v4/matchlists/by-account/{AccountId}?queue=420&api_key={ApiKey}";
