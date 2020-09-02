@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import java.util.List;
 
 @Data
-public class Datas {
+public class TempDatas {
     @Id
     private Long matchId;
     private List<Integer> array;    //[championId1,...,championId10,Win] teamId 100이 이기면 Win=0, teamId 200이 이기면 Win=1
