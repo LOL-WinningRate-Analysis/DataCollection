@@ -67,6 +67,13 @@ public class MongoDBRepository {
         mongoTemplate.save(timeLine);
     }
 
+    public TimeLine findTimeLine(long matchId){
+        Query query = Query.query(
+                Criteria.where("_id").is(matchId)
+        );
+        TimeLine timeLine = mongoTemplate.findOne(query, TimeLine.class);
+        return timeLine;
+    }
 
 }
 
