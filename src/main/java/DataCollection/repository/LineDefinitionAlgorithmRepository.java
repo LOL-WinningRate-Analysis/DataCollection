@@ -1,5 +1,6 @@
 package DataCollection.repository;
 
+import DataCollection.api.DataCollectionApiClient;
 import DataCollection.domain.MatchDetail;
 import DataCollection.domain.MergedData;
 import DataCollection.domain.TimeLine;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.nio.channels.ScatteringByteChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,9 +21,18 @@ public class LineDefinitionAlgorithmRepository {
     @Autowired
     MongoDBRepository mongoDBRepository;
 
+    @Autowired
+    DataCollectionApiClient dataCollectionApiClient;
+
     public MergedData informationMerge(long matchId) {
         MatchDetail matchDetail = mongoDBRepository.findMatchDetail(matchId);
         TimeLine timeLine = mongoDBRepository.findTimeLine(matchId);
+
+        if(matchDetail==null)
+            matchDetail = dataCollectionApiClient.getMatchDetail(matchId);
+        if(timeLine==null)
+            timeLine = dataCollectionApiClient.getTimeLine(matchId);
+
         MergedData mergedData = new MergedData();
         mergedData.setMatchDetail(matchDetail);
         mergedData.setTimeLine(timeLine);
@@ -46,7 +57,7 @@ public class LineDefinitionAlgorithmRepository {
         return false;
     }
 
-    public List decideJungle(MergedData mergedData){
+    public List<Integer> decideJungle(MergedData mergedData){
         List<Integer> result = new ArrayList<Integer>();
         for(int i=0;i<10;i++){
             result.add(0);
@@ -68,7 +79,7 @@ public class LineDefinitionAlgorithmRepository {
         return result;
     }
 
-    public List decideTop(MergedData mergedData){
+    public List<Integer> decideTop(MergedData mergedData){
         List<Integer> result = new ArrayList<Integer>(100);
         for(int i=0;i<10;i++){
             result.add(0);
@@ -95,7 +106,7 @@ public class LineDefinitionAlgorithmRepository {
     }
 
 
-    public List decideMid(MergedData mergedData){
+    public List<Integer> decideMid(MergedData mergedData){
         List<Integer> result = new ArrayList<Integer>(100);
         for(int i=0;i<10;i++){
             result.add(0);
@@ -120,7 +131,7 @@ public class LineDefinitionAlgorithmRepository {
         return result;
     }
 
-    public List decideBotom(MergedData mergedData){
+    public List<Integer> decideBotom(MergedData mergedData){
         List<Integer> result = new ArrayList<Integer>(100);
         for(int i=0;i<10;i++){
             result.add(0);
@@ -155,7 +166,7 @@ public class LineDefinitionAlgorithmRepository {
     }
 
 
-    public List decideSupport(MergedData mergedData){
+    public List<Integer> decideSupport(MergedData mergedData){
         List<Integer> result = new ArrayList<Integer>(100);
         for(int i=0;i<10;i++){
             result.add(0);
@@ -193,8 +204,8 @@ public class LineDefinitionAlgorithmRepository {
     }
 
 
-    public List<List> getWeight(MergedData mergedData) {
-        List<List> result = new ArrayList<List>();
+    public List<List<Integer>> getWeight(MergedData mergedData) {
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
         List top = decideTop(mergedData);
         List jungle = decideJungle(mergedData);
         List mid = decideMid(mergedData);
@@ -208,5 +219,73 @@ public class LineDefinitionAlgorithmRepository {
         result.add(support);
 
         return result;
+    }
+
+    public List<Integer> decideLine(List<List<Integer>> lists){
+        List<Integer> participantsIds = new ArrayList<Integer>();
+        for(int i=0;i<10;i++) {
+            participantsIds.add(0);
+        }
+
+        int max_team1=0;
+        int max_team2=0;
+
+        for(int a=0;a<5;a++){
+            if(lists.get(0).get(a)==0) continue;
+            for(int b=0;b<5;b++){
+                if(lists.get(1).get(b)==0) continue;
+                if(b==a) continue;
+                for(int c=0;c<5;c++){
+                    if(lists.get(2).get(c)==0) continue;
+                    if(c==a||c==b) continue;
+                    for(int d=0;d<5;d++){
+                        if(lists.get(3).get(d)==0) continue;
+                        if(d==c||d==b||d==a) continue;
+                        for(int e=0;e<5;e++){
+                            if(e==d||e==c||e==b||e==a) continue;
+                            int temp = lists.get(0).get(a)+lists.get(1).get(b)+lists.get(2).get(c)+lists.get(3).get(d)+lists.get(4).get(e);
+                            if(temp>max_team1){
+                                participantsIds.set(0,a);
+                                participantsIds.set(1,b);
+                                participantsIds.set(2,c);
+                                participantsIds.set(3,d);
+                                participantsIds.set(4,e);
+                                max_team1=temp;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for(int a=5;a<10;a++){
+            if(lists.get(0).get(a)==0) continue;
+            for(int b=5;b<10;b++){
+                if(lists.get(1).get(b)==0) continue;
+                if(b==a) continue;
+                for(int c=5;c<10;c++){
+                    if(lists.get(2).get(c)==0) continue;
+                    if(c==a||c==b) continue;
+                    for(int d=5;d<10;d++){
+                        if(lists.get(3).get(d)==0) continue;
+                        if(d==c||d==b||d==a) continue;
+                        for(int e=5;e<10;e++){
+                            if(e==d||e==c||e==b||e==a) continue;
+                            int temp = lists.get(0).get(a)+lists.get(1).get(b)+lists.get(2).get(c)+lists.get(3).get(d)+lists.get(4).get(e);
+                            if(temp>max_team2){
+                                participantsIds.set(5,a);
+                                participantsIds.set(6,b);
+                                participantsIds.set(7,c);
+                                participantsIds.set(8,d);
+                                participantsIds.set(9,e);
+                                max_team2=temp;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return participantsIds;
+
     }
 }
