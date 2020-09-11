@@ -40,9 +40,14 @@ public class LineDefinitionAlgorithmController {
     }
 
     @GetMapping("/Weight")
-    public List<List> getWeight(@RequestParam long matchId){
+    public List<List<Integer>> getWeight(@RequestParam long matchId){
         MergedData mergedData = lineDefinitionAlgorithmService.informationMerge(matchId);
         return lineDefinitionAlgorithmService.getWeight(mergedData);
+    }
 
+    @GetMapping("/decide")
+    public List decideLine(@RequestParam long matchId){
+        MergedData mergedData = lineDefinitionAlgorithmService.informationMerge(matchId);
+        return lineDefinitionAlgorithmService.decideLine(mergedData);
     }
 }
